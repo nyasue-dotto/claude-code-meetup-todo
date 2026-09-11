@@ -64,14 +64,11 @@ export async function addTodo(title: string, dueDate: string | null): Promise<To
   return todo;
 }
 
-export async function updateTodo(
-  id: string,
-  patch: Partial<Pick<Todo, "title" | "dueDate" | "completed">>
-): Promise<Todo | null> {
+export async function toggleTodo(id: string): Promise<Todo | null> {
   const todos = await load();
   const todo = todos.find((t) => t.id === id);
   if (!todo) return null;
-  Object.assign(todo, patch);
+  todo.completed = !todo.completed;
   await save(todos);
   return todo;
 }

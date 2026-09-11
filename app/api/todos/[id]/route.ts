@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { deleteTodo, updateTodo } from "@/lib/store";
+import { deleteTodo, toggleTodo } from "@/lib/store";
 
 export async function PATCH(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const updated = await updateTodo(id, { completed: true });
+  const updated = await toggleTodo(id);
   if (!updated) {
     return NextResponse.json({ error: "not found" }, { status: 404 });
   }

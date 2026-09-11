@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { addTodo, listTodos } from "@/lib/store";
+import { PRIORITY_VALUES, type Priority } from "@/lib/priority";
 
 export async function GET() {
   const todos = await listTodos();
@@ -18,6 +19,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "タスク名は100文字以内で入力してください" }, { status: 400 });
   }
 
-  const todo = await addTodo(title, dueDate);
+  const rawPriority = body?.priority;
+  const priority: Priority = PRIORITY_VALUES.includes(rawPriority) ? rawPriority : "medium";
+
+  const todo = await addTodo(title, dueDate, priority);
   return NextResponse.json(todo, { status: 201 });
 }
